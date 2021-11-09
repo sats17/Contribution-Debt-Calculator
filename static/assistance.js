@@ -1,4 +1,5 @@
-function round(value, decimals) {
+function round(value) {
+    let decimals = 3;
     return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
 }
 
@@ -10,6 +11,30 @@ function calculateTotalBill(expense){
     return totalBill
 }
 
+function calculateExpectedContributionFromEachMember(totalBill, member){
+    return round(totalBill / member)
+}
+
+function calculateTotalPaymentByEachMembers(expense) {
+    totalMembersPaymentArray = []
+    tempArrayForTotalPayment = []
+    for (let i in expense) {
+        tempPayment = []
+        payments = expense[i]['payments']
+        for (let names in payments){
+            tempPayment.push(payments[names])
+        }
+        tempArrayForTotalPayment.push(tempPayment)
+    }
+    zippedPaymentOfEachMembers = tempArrayForTotalPayment.map((k, i) => [k, b[i]]);
+    for (let eachMemberPaymentArray in zippedPaymentOfEachMembers) {
+        console.log(eachMemberPaymentArray)
+        // Need to check how we can write code to zip [[a,b,c],[1,2,3],[x,y,z]] to [[a,1,x][b,2,y][c,3,z]]
+        // need to check how zip work in python
+    }
+    return null;
+}
+
 
  expense = {'food': {'bill': 250, 'payments': {'1': 20, '2': 32, '3': 43, '4': 35, '5': 65, '6': 12, '7': 43}},
                'rent': {'bill': 2492, 'payments': {'1': 902, '2': 98, '3': 84, '4': 35, '5': 32, '6': 552, '7': 789}},
@@ -17,4 +42,4 @@ function calculateTotalBill(expense){
                'samosa': {'bill': 110, 'payments': {'1': 15, '2': 15, '3': 5, '4': 20, '5': 15, '6': 25, '7': 15}},
                'pizza': {'bill': 1700, 'payments': {'1': 50, '2': 150, '3': 200, '4': 250, '5': 300, '6': 350, '7': 400}}}
 
-console.log(calculateTotalBill(expense))
+console.log(calculateTotalPaymentByEachMembers(expense))

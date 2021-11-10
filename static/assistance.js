@@ -15,7 +15,7 @@ function calculateExpectedContributionFromEachMember(totalBill, member){
     return round(totalBill / member)
 }
 
-function calculateTotalPaymentByEachMembers(expense) {
+function calculateTotalPaymentByEachMembers(expense, totalMembers) {
     totalMembersPaymentArray = []
     tempArrayForTotalPayment = []
     for (let i in expense) {
@@ -26,12 +26,26 @@ function calculateTotalPaymentByEachMembers(expense) {
         }
         tempArrayForTotalPayment.push(tempPayment)
     }
-    zippedPaymentOfEachMembers = tempArrayForTotalPayment.map((k, i) => [k, b[i]]);
-    for (let eachMemberPaymentArray in zippedPaymentOfEachMembers) {
-        console.log(eachMemberPaymentArray)
-        // Need to check how we can write code to zip [[a,b,c],[1,2,3],[x,y,z]] to [[a,1,x][b,2,y][c,3,z]]
-        // need to check how zip work in python
+    console.log(tempArrayForTotalPayment)
+    outerCounter = 0
+
+    while(outerCounter < totalMembers){
+        innerCounter = 0
+        totalPaymentByEachMember = 0
+        while(innerCounter < tempArrayForTotalPayment.length) {
+            totalPaymentByEachMember = tempArrayForTotalPayment[innerCounter][outerCounter] + totalPaymentByEachMember
+            innerCounter++
+        }
+        totalMembersPaymentArray.push(totalPaymentByEachMember)
+        outerCounter++
     }
+    console.log(totalMembersPaymentArray)
+//    zippedPaymentOfEachMembers = tempArrayForTotalPayment.map((k, i) => [k, b[i]]);
+//    for (let eachMemberPaymentArray in zippedPaymentOfEachMembers) {
+//        console.log(eachMemberPaymentArray)
+//        // Need to check how we can write code to zip [[a,b,c],[1,2,3],[x,y,z]] to [[a,1,x][b,2,y][c,3,z]]
+//        // need to check how zip work in python
+//    }
     return null;
 }
 
@@ -42,4 +56,4 @@ function calculateTotalPaymentByEachMembers(expense) {
                'samosa': {'bill': 110, 'payments': {'1': 15, '2': 15, '3': 5, '4': 20, '5': 15, '6': 25, '7': 15}},
                'pizza': {'bill': 1700, 'payments': {'1': 50, '2': 150, '3': 200, '4': 250, '5': 300, '6': 350, '7': 400}}}
 
-console.log(calculateTotalPaymentByEachMembers(expense))
+calculateTotalPaymentByEachMembers(expense, 6)

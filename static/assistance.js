@@ -29,7 +29,7 @@ function calculateTotalPaymentByEachMembers(expense, totalMembers) {
     console.log(tempArrayForTotalPayment)
     outerCounter = 0
 
-    while(outerCounter < totalMembers){
+    while(outerCounter < totalMembers) {
         innerCounter = 0
         totalPaymentByEachMember = 0
         while(innerCounter < tempArrayForTotalPayment.length) {
@@ -39,16 +39,18 @@ function calculateTotalPaymentByEachMembers(expense, totalMembers) {
         totalMembersPaymentArray.push(totalPaymentByEachMember)
         outerCounter++
     }
-    console.log(totalMembersPaymentArray)
-//    zippedPaymentOfEachMembers = tempArrayForTotalPayment.map((k, i) => [k, b[i]]);
-//    for (let eachMemberPaymentArray in zippedPaymentOfEachMembers) {
-//        console.log(eachMemberPaymentArray)
-//        // Need to check how we can write code to zip [[a,b,c],[1,2,3],[x,y,z]] to [[a,1,x][b,2,y][c,3,z]]
-//        // need to check how zip work in python
-//    }
-    return null;
+    return totalMembersPaymentArray;
 }
 
+function zipPaymentAndNames(names, payments){
+    zippedData = {}
+    counter = 0
+    while(counter < names.length){
+        zippedData[names[counter]] = payments[counter]
+        counter++
+    }
+    return zippedData
+}
 
  expense = {'food': {'bill': 250, 'payments': {'1': 20, '2': 32, '3': 43, '4': 35, '5': 65, '6': 12, '7': 43}},
                'rent': {'bill': 2492, 'payments': {'1': 902, '2': 98, '3': 84, '4': 35, '5': 32, '6': 552, '7': 789}},
@@ -56,4 +58,4 @@ function calculateTotalPaymentByEachMembers(expense, totalMembers) {
                'samosa': {'bill': 110, 'payments': {'1': 15, '2': 15, '3': 5, '4': 20, '5': 15, '6': 25, '7': 15}},
                'pizza': {'bill': 1700, 'payments': {'1': 50, '2': 150, '3': 200, '4': 250, '5': 300, '6': 350, '7': 400}}}
 
-calculateTotalPaymentByEachMembers(expense, 6)
+zipPaymentAndNames(['a', 'b', 'c'], ['12', '14', '33','12'])

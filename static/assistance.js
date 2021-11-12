@@ -1,3 +1,23 @@
+function getPaymentExchangeInformation(totalMembers, expense){
+    console.log("Total members "+ totalMembers)
+    console.log("Expense data "+ JSON.stringify(expense))
+    var names = extractMembersNames(expense)
+    var totalBill = calculateTotalBill(expense)
+    console.log("Total bill "+ totalBill)
+    var expectedContributionBillFromEachMember = calculateExpectedContributionFromEachMember(totalBill, totalMembers)
+    console.log("Expected contribution from each members "+ expectedContributionBillFromEachMember)
+    var totalPayFromEachMemberForEachSource = calculateTotalPaymentByEachMembers(expense, totalMembers)
+    console.log("Total members payment for each source ", totalPayFromEachMemberForEachSource)
+    var zippedPaymentData = zipPaymentAndNames(names, totalPayFromEachMemberForEachSource)
+    console.log("Zipped payment data "+JSON.stringify(zippedPaymentData))
+    var differentiatedResponse = differentiateCreditorAndDebtor(zippedPaymentData, expectedContributionBillFromEachMember)
+    console.log("Differentiated response "+ JSON.stringify(differentiatedResponse))
+   events = generateResolvedContributionEvents(differentiatedResponse)
+
+    return events
+}
+
+
 function round(value) {
     let decimals = 3;
     return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
@@ -16,8 +36,9 @@ function calculateExpectedContributionFromEachMember(totalBill, member){
 }
 
 function calculateTotalPaymentByEachMembers(expense, totalMembers) {
-    totalMembersPaymentArray = []
-    tempArrayForTotalPayment = []
+    var totalMembersPaymentArray = []
+    var tempArrayForTotalPayment = []
+    // Create array of payments
     for (let i in expense) {
         tempPayment = []
         payments = expense[i]['payments']
@@ -26,18 +47,20 @@ function calculateTotalPaymentByEachMembers(expense, totalMembers) {
         }
         tempArrayForTotalPayment.push(tempPayment)
     }
-    console.log(tempArrayForTotalPayment)
-    outerCounter = 0
+    console.log("Payments array ", tempArrayForTotalPayment)
+    let memberCounter = 0
 
-    while(outerCounter < totalMembers) {
-        innerCounter = 0
-        totalPaymentByEachMember = 0
-        while(innerCounter < tempArrayForTotalPayment.length) {
-            totalPaymentByEachMember = tempArrayForTotalPayment[innerCounter][outerCounter] + totalPaymentByEachMember
-            innerCounter++
+    // Calculate total payment of each members from nested array
+    // Performing nested loop on nested array so we can fetch each member payments from nested array
+    while(memberCounter < totalMembers) {
+        let memberPaymentSourceCounter = 0
+        var totalPaymentByEachMember = 0
+        while(memberPaymentSourceCounter < tempArrayForTotalPayment.length) {
+            totalPaymentByEachMember = tempArrayForTotalPayment[memberPaymentSourceCounter][memberCounter] + totalPaymentByEachMember
+            memberPaymentSourceCounter++
         }
         totalMembersPaymentArray.push(totalPaymentByEachMember)
-        outerCounter++
+        memberCounter++
     }
     return totalMembersPaymentArray;
 }
@@ -87,57 +110,72 @@ function differentiateCreditorAndDebtor(zippedPaymentData, expectedContributionB
 
 // Need to fix this code
 function generateResolvedContributionEvents(differentiatedResponse) {
-    events = []
-    creditor = differentiatedResponse['creditor']
-    debtor = differentiatedResponse['debtor']
+    var events = []
+    var creditor = differentiatedResponse['creditor']
+    var debtor = differentiatedResponse['debtor']
     console.log("Creditors ", creditor)
     console.log("Debtor ", debtor)
-    creditCounter = 0
-    debtCounter = 0
-    creditorsList = []
-    debtorsList = []
-    for(let creditor in creditor.items():
-        creditorsList.append(list(creditor))
-    for debtor in debtor.items():
-        debtorsList.append(list(debtor))
+    var creditCounter = 0
+    var debtCounter = 0
+    var creditorsList = Object.entries(creditor);
+    var debtorsList = Object.entries(debtor);
+    console.log("Creditor list ", creditorsList)
+    console.log("Debtor list ", debtorsList)
 
-    while True:
-        # Running creditorList and debtorList simultaneously, once operations on both list completed then breaking
-        # this loop to avoid array index out of bound errors
-        if creditCounter > len(creditorsList) - 1 and debtCounter > len(debtorsList) - 1:
+    while(true){
+        // Running creditorList and debtorList simultaneously, once operations on both list completed then breaking
+        // this loop to avoid array index out of bound errors
+        if(creditCounter > creditorsList.length - 1 && debtCounter > debtorsList.length - 1){
             break
-        print("Credit counter ", creditCounter)
-        print("Debit counter", debtCounter)
+        }
+        console.log("Credit counter ", creditCounter)
+        console.log("Debit counter", debtCounter)
         currentCreditor = creditorsList[creditCounter]
         currentDebtor = debtorsList[debtCounter]
-        # When Credit person have less amount that debit person, then creditor pay all his amount to debtor
-        if currentCreditor[1] != 0 and int(currentCreditor[1]) < int(currentDebtor[1]):
-            events.append(eventGenerator(currentCreditor[0], roundValue(currentCreditor[1]), currentDebtor[0]))
-            exchangeAmount = roundValue(creditorsList[creditCounter][1])
+        // When Credit person have less amount that debit person, then creditor pay all his amount to debtor
+        if(currentCreditor[1] != 0 && int(currentCreditor[1]) < int(currentDebtor[1])){
+            events.push(eventGenerator(currentCreditor[0], round(currentCreditor[1]), currentDebtor[0]))
+            exchangeAmount = round(creditorsList[creditCounter][1])
             creditorsList[creditCounter][1] = 0
-            debtorAmount = roundValue(debtorsList[debtCounter][1])
-            debtorsList[debtCounter][1] = roundValue(debtorAmount - exchangeAmount)
-            creditCounter = creditCounter + 1  # Increase counter to iterate to next debtor
-        # When debit person have less amount that credit person, then creditor will pay only amount that debtor have
-        if currentDebtor[1] != 0 and int(currentCreditor[1]) > int(currentDebtor[1]):
-            events.append(eventGenerator(currentCreditor[0], round(currentDebtor[1], 2), currentDebtor[0]))
-            exchangeAmount = roundValue(debtorsList[debtCounter][1])
+            debtorAmount = round(debtorsList[debtCounter][1])
+            debtorsList[debtCounter][1] = round(debtorAmount - exchangeAmount)
+            creditCounter = creditCounter + 1  // Increase counter to iterate to next debtor
+        }
+        // When debit person have less amount that credit person, then creditor will pay only amount that debtor have
+        if(currentDebtor[1] != 0 && int(currentCreditor[1]) > int(currentDebtor[1])){
+            events.push(eventGenerator(currentCreditor[0], round(currentDebtor[1]), currentDebtor[0]))
+            exchangeAmount = round(debtorsList[debtCounter][1])
             debtorsList[debtCounter][1] = 0
-            creditorAmount = roundValue(creditorsList[creditCounter][1])
-            creditorsList[creditCounter][1] = roundValue(creditorAmount - exchangeAmount)
-            debtCounter = debtCounter + 1  # Increase counter to iterate to next debtor
-        # When credit person and debit person have equal amount, then creditor will pay whatever he have to debtor
-        if currentDebtor[1] != 0 and currentCreditor[1] != 0 and int(currentCreditor[1]) == int(currentDebtor[1]):
-            events.append(eventGenerator(currentCreditor[0], roundValue(currentCreditor[1]), currentDebtor[0]))
+            creditorAmount = round(creditorsList[creditCounter][1])
+            creditorsList[creditCounter][1] = round(creditorAmount - exchangeAmount)
+            debtCounter = debtCounter + 1  // Increase counter to iterate to next debtor
+        }
+        // When credit person and debit person have equal amount, then creditor will pay whatever he have to debtor
+        if(currentDebtor[1] != 0 && currentCreditor[1] != 0 && int(currentCreditor[1]) == int(currentDebtor[1])){
+            events.push(eventGenerator(currentCreditor[0], round(currentCreditor[1]), currentDebtor[0]))
             creditorsList[creditCounter][1] = 0
             debtorsList[debtCounter][1] = 0
-            debtCounter = debtCounter + 1  # Increase counter to iterate to next debtor
-            creditCounter = creditCounter + 1  # Increase counter to iterate to next creditor
-        print("Updated creditors list", creditorsList)
-        print("Updated debtors list ", debtorsList)
-
+            debtCounter = debtCounter + 1  // Increase counter to iterate to next debtor
+            creditCounter = creditCounter + 1  // Increase counter to iterate to next creditor
+        }
+        console.log("Updated creditors list", creditorsList)
+        console.log("Updated debtors list ", debtorsList)
+    }
     return events
 }
+
+function int(value){
+    return Math.floor(value)
+}
+
+
+function eventGenerator(creditorName, amount, debtorName){
+    console.log(creditorName.toString() + " will pay " + amount.toString() + " rupees to " + debtorName.toString())
+    return creditorName.toString() + " will pay " + amount.toString() + " rupees to " + debtorName.toString()
+}
+
+
+
 
  expense = {'food': {'bill': 250, 'payments': {'1': 20, '2': 32, '3': 43, '4': 35, '5': 65, '6': 12, '7': 43}},
                'rent': {'bill': 2492, 'payments': {'1': 902, '2': 98, '3': 84, '4': 35, '5': 32, '6': 552, '7': 789}},
@@ -145,5 +183,7 @@ function generateResolvedContributionEvents(differentiatedResponse) {
                'samosa': {'bill': 110, 'payments': {'1': 15, '2': 15, '3': 5, '4': 20, '5': 15, '6': 25, '7': 15}},
                'pizza': {'bill': 1700, 'payments': {'1': 50, '2': 150, '3': 200, '4': 250, '5': 300, '6': 350, '7': 400}}}
 
-let a = zipPaymentAndNames(['a', 'b', 'c'], ['12', '14', '33','12'])
-differentiateCreditorAndDebtor(a, 14)
+//let a = zipPaymentAndNames(['a', 'b', 'c'], ['12', '14', '33','12'])
+//differentiateCreditorAndDebtor(a, 14)
+events = getPaymentExchangeInformation(7, expense)
+console.log(events)

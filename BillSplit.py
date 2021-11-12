@@ -110,6 +110,7 @@ def generateResolvedContributionEvents(differentiatedResponse):
         creditorsList.append(list(creditor))
     for debtor in debtor.items():
         debtorsList.append(list(debtor))
+    print("Creditor list ",creditorsList)
     while True:
         # Running creditorList and debtorList simultaneously, once operations on both list completed then breaking
         # this loop to avoid array index out of bound errors

@@ -9,5 +9,6 @@ def index():
 
 
 if __name__ == '__main__':
-    Flask_App.debug = True
-    Flask_App.run()
+    print(round(1.429, 3))
+    # Flask_App.debug = True
+    # Flask_App.run()

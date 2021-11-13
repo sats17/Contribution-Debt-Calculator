@@ -1,19 +1,27 @@
-function getPaymentExchangeInformation(totalMembers, expense){
-    console.log("Total members "+ totalMembers)
-    console.log("Expense data "+ JSON.stringify(expense))
+
+/* Main function which will get all debt information, parameters are expense which is detail transaction information
+ and total members who involved in transactions.
+Sample expense :
+{
+    'food': {'bill': 95, 'payments': {'firstMember': 20, 'secondMember': 32, 'thirdMember': 43}},
+    'rent': {'bill': 52, 'payments': {'firstMember': 20, 'secondMember': 32, 'thirdMember': 00}}
+}
+*/
+function getDebtInformation(totalMembers, expense){
+    console.log("Total members involved in transaction "+ totalMembers)
+    console.log("Detail transaction data "+ JSON.stringify(expense))
     var names = extractMembersNames(expense)
     var totalBill = calculateTotalBill(expense)
-    console.log("Total bill "+ totalBill)
+    console.log("Calculated total bill "+ totalBill)
     var expectedContributionBillFromEachMember = calculateExpectedContributionFromEachMember(totalBill, totalMembers)
     console.log("Expected contribution from each members "+ expectedContributionBillFromEachMember)
     var totalPayFromEachMemberForEachSource = calculateTotalPaymentByEachMembers(expense, totalMembers)
-    console.log("Total members payment for each source ", totalPayFromEachMemberForEachSource)
+    console.log("Total payment done by each member ", totalPayFromEachMemberForEachSource)
     var zippedPaymentData = zipPaymentAndNames(names, totalPayFromEachMemberForEachSource)
-    console.log("Zipped payment data "+JSON.stringify(zippedPaymentData))
+    console.log("Zipped payment data with member names "+JSON.stringify(zippedPaymentData))
     var differentiatedResponse = differentiateCreditorAndDebtor(zippedPaymentData, expectedContributionBillFromEachMember)
-    console.log("Differentiated response "+ JSON.stringify(differentiatedResponse))
-   events = generateResolvedContributionEvents(differentiatedResponse)
-
+    console.log("Differentiated creditor and debtor response "+ JSON.stringify(differentiatedResponse))
+    events = generateResolvedContributionEvents(differentiatedResponse)
     return events
 }
 
@@ -87,6 +95,8 @@ function extractMembersNames(expense){
     return names
 }
 
+// Function compares expectedContributionBill with total payment of each members and bifurcate them into creditor, debtor
+// and even
 function differentiateCreditorAndDebtor(zippedPaymentData, expectedContributionBill){
     differentiatedResponse = {}
     creditor = {}
@@ -108,31 +118,29 @@ function differentiateCreditorAndDebtor(zippedPaymentData, expectedContributionB
     return differentiatedResponse
 }
 
-// Need to fix this code
+// Function calculate who have to pay debt whom by comparing debtor and creditor in differentiatedResponse.
 function generateResolvedContributionEvents(differentiatedResponse) {
     var events = []
     var creditor = differentiatedResponse['creditor']
     var debtor = differentiatedResponse['debtor']
-    console.log("Creditors ", creditor)
-    console.log("Debtor ", debtor)
     var creditCounter = 0
     var debtCounter = 0
+    // Converting JSON object to array entries
     var creditorsList = Object.entries(creditor);
     var debtorsList = Object.entries(debtor);
-    console.log("Creditor list ", creditorsList)
-    console.log("Debtor list ", debtorsList)
 
-    while(true){
+    // Looping over each creditorList and debtorList anc checking who will give debt to whom
+    while(creditCounter < creditorsList.length && debtCounter < debtorsList.length){
         // Running creditorList and debtorList simultaneously, once operations on both list completed then breaking
         // this loop to avoid array index out of bound errors
-        if(creditCounter > creditorsList.length - 1 && debtCounter > debtorsList.length - 1){
-            break
-        }
-        console.log("Credit counter ", creditCounter)
-        console.log("Debit counter", debtCounter)
+        // Deprecated this logic and puts this condition under while loop
+//        if(creditCounter > creditorsList.length - 1 && debtCounter > debtorsList.length - 1){
+//            break
+//        }
         currentCreditor = creditorsList[creditCounter]
         currentDebtor = debtorsList[debtCounter]
         // When Credit person have less amount that debit person, then creditor pay all his amount to debtor
+        // Compromising point values comparison using int function
         if(currentCreditor[1] != 0 && int(currentCreditor[1]) < int(currentDebtor[1])){
             events.push(eventGenerator(currentCreditor[0], round(currentCreditor[1]), currentDebtor[0]))
             exchangeAmount = round(creditorsList[creditCounter][1])
@@ -142,6 +150,7 @@ function generateResolvedContributionEvents(differentiatedResponse) {
             creditCounter = creditCounter + 1  // Increase counter to iterate to next debtor
         }
         // When debit person have less amount that credit person, then creditor will pay only amount that debtor have
+        // Compromising point values comparison using int function
         if(currentDebtor[1] != 0 && int(currentCreditor[1]) > int(currentDebtor[1])){
             events.push(eventGenerator(currentCreditor[0], round(currentDebtor[1]), currentDebtor[0]))
             exchangeAmount = round(debtorsList[debtCounter][1])
@@ -151,6 +160,7 @@ function generateResolvedContributionEvents(differentiatedResponse) {
             debtCounter = debtCounter + 1  // Increase counter to iterate to next debtor
         }
         // When credit person and debit person have equal amount, then creditor will pay whatever he have to debtor
+        // Compromising point values comparison using int function
         if(currentDebtor[1] != 0 && currentCreditor[1] != 0 && int(currentCreditor[1]) == int(currentDebtor[1])){
             events.push(eventGenerator(currentCreditor[0], round(currentCreditor[1]), currentDebtor[0]))
             creditorsList[creditCounter][1] = 0
@@ -158,12 +168,11 @@ function generateResolvedContributionEvents(differentiatedResponse) {
             debtCounter = debtCounter + 1  // Increase counter to iterate to next debtor
             creditCounter = creditCounter + 1  // Increase counter to iterate to next creditor
         }
-        console.log("Updated creditors list", creditorsList)
-        console.log("Updated debtors list ", debtorsList)
     }
     return events
 }
 
+// Convert float values to int
 function int(value){
     return Math.floor(value)
 }
@@ -185,5 +194,5 @@ function eventGenerator(creditorName, amount, debtorName){
 
 //let a = zipPaymentAndNames(['a', 'b', 'c'], ['12', '14', '33','12'])
 //differentiateCreditorAndDebtor(a, 14)
-events = getPaymentExchangeInformation(7, expense)
+events = getDebtInformation(7, expense)
 console.log(events)

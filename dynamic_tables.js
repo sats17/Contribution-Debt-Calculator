@@ -1,10 +1,12 @@
 function generateTable() {
     if(parseInt($("#contributors").val()) > 20 || parseInt($("#contributors").val()) < 2){
+        console.log("Log : Invalid values entered ")
         $("#tablesId").empty();
         alert("Invalid values entered")
         return 0
     }
     if(parseInt($("#merchants").val()) > 20 || parseInt($("#merchants").val()) < 1){
+        console.log("Log : Invalid values entered ")
         $("#tablesId").empty();
         alert("Invalid values entered")
         return 0

@@ -10,6 +10,15 @@
     <script src='dynamic_tables.js' type='text/javascript'></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+        // This is an old version, for a more recent version look at
+        // https://jsfiddle.net/DRSDavidSoft/zb4ft1qq/2/
+        function maxLengthCheck(object)
+        {
+            if (object.value.length > object.maxLength)
+                object.value = object.value.slice(0, object.maxLength)
+        }
+    </script>
     <style>
         h1 {text-align: center;}
         p {text-align: center;}
@@ -19,31 +28,18 @@
 
 <body>
 <div class="container">
+<div class="container">
     <h1 >Contribution Debt Calculator</h1>
     <p>We are here to resolve your debt calculation</p>
 </div>
 
-<div class="container">
-    <input type="number" id="contributors" class="form-control input-normal" placeholder="Enter total number of contributors" required autofocus/><br>
-    <input type="number" id="merchants" class="form-control" placeholder= "Enter total number of merchants"/><br>
+<div class="col-lg-4 col-lg-offset-4" >
+    <input type="number" min="2" max="30" maxlength = "2" id="contributors" class="form-control" placeholder="Enter total number of contributors" required autofocus/><br>
+    <input type="number" min="1" max="30" maxlength = "2" id="merchants" class="form-control" placeholder= "Enter total number of merchants"/><br>
     <input type="button" class="btn btn-lg btn-primary btn-block" value="Click Me to generate fields to put data " onclick="generateTable();"/>
 </div>
-<!--<form>-->
-<!--    <div class="form-group">-->
-<!--        <label for="contributorsLabel">Total contributors</label>-->
-<!--        <input type="number" class="form-control" id="contributors" aria-describedby="emailHelp" placeholder="Enter total number of contributors">-->
-<!--        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
-<!--    </div>-->
-<!--    <div class="form-group">-->
-<!--        <label for="merchantsLabel">Total merchants</label>-->
-<!--        <input type="number" class="form-control" id="merchants" placeholder="Enter total number of merchants">-->
-<!--    </div>-->
-<!--    <button type="button" class="btn btn-primary" onclick="generateTable();">Generate</button>-->
-<!--</form>-->
-
-
-
-<div id="dydiv"></div>
+</div>
+<div id="tablesId"></div>
 
 
 </body>

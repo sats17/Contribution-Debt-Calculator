@@ -1,4 +1,14 @@
 function generateTable() {
+    if(parseInt($("#contributors").val()) > 20 || parseInt($("#contributors").val()) < 2){
+        $("#tablesId").empty();
+        alert("Invalid values entered")
+        return 0
+    }
+    if(parseInt($("#merchants").val()) > 20 || parseInt($("#merchants").val()) < 1){
+        $("#tablesId").empty();
+        alert("Invalid values entered")
+        return 0
+    }
     var blank = "<td></td>"
     var head = "";
     for (i = 0; i < parseInt($("#contributors").val()); i++) {
@@ -21,13 +31,12 @@ function generateTable() {
     var table = "<table border='1px' id='transactionDataTable'>" + head + rows + "</table>";
     var submitButton = "<input type='button' value='Submit' onclick='onSubmitClick();' />"
 
-    $("#dydiv").empty();
-    $("#dydiv").append(table);
-    $("#dydiv").append(submitButton);
+    $("#tablesId").empty();
+    $("#tablesId").append(table);
+    $("#tablesId").append(submitButton);
 }
 
 function onSubmitClick() {
-    console.log("Test")
     let totalContributors = parseInt($("#contributors").val());
     console.log(totalContributors)
     //gets table

@@ -1,39 +1,55 @@
 function generateTable() {
-    if(parseInt($("#contributors").val()) > 20 || parseInt($("#contributors").val()) < 2){
+    var merchants = parseInt($("#merchants").val())
+    var contributors = parseInt($("#contributors").val())
+    console.log("Input values : "+ isNaN(contributors))
+    if(isNaN(contributors) || contributors > 20 || contributors < 2){
         console.log("Log : Invalid values entered ")
         $("#tablesId").empty();
-        alert("Invalid values entered")
+        alert("Invalid value entered, \n" +
+            "Contributors must be greater than 2 and less than 20 \n" +
+            "Merchants must be greater than 1 and less than 20.")
         return 0
     }
-    if(parseInt($("#merchants").val()) > 20 || parseInt($("#merchants").val()) < 1){
+    if(isNaN(merchants) || merchants > 20 || merchants < 1){
         console.log("Log : Invalid values entered ")
         $("#tablesId").empty();
-        alert("Invalid values entered")
+        alert("Invalid value entered, \n" +
+            "Contributors must be greater than 2 and less than 20 \n" +
+            "Merchants must be greater than 1 and less than 20.")
         return 0
     }
-    var blank = "<td></td>"
+    var blank = "<td>#</td>"
     var head = "";
-    for (i = 0; i < parseInt($("#contributors").val()); i++) {
+    for (i = 0; i < contributors; i++) {
         head += "<th contenteditable='true'>contributor name " + (i + 1) + "</th>";
     }
     head = "<tr>" + blank + head + "</tr>";
     var rows = "";
     var data = "";
-    for (j = 0; j < parseInt($("#merchants").val()); j++) {
+    for (j = 0; j < merchants; j++) {
         data += "<td contenteditable='true'>merchant name " + j + "</td>";
 
-        for (k = 0; k < parseInt($("#contributors").val()); k++) {
+        for (k = 0; k < contributors; k++) {
             data += "<td contenteditable='true'>" + 00 + "</td>";
         }
         rows += "<tr>" + data + "</tr>";
         data = "";
 
     }
-
-    var table = "<table border='1px' id='transactionDataTable'>" + head + rows + "</table>";
-    var submitButton = "<input type='button' value='Submit' onclick='onSubmitClick();' />"
+    var note = "<div class='container' >\n" +
+        "<ul style='list-style-type:none;'>\n" +
+        "    <li>Update merchants names from table</li>\n" +
+        "    <li>Update contributors names from table</li>\n" +
+        "    <li>Add values accordingly</li>\n" +
+        "    <li>Click on submit button</li>\n" +
+        "</ul>\n" +
+        "</div>"
+    var table = "<div class='table-responsive'><table class='table table-hover' border='1px' id='transactionDataTable'>" + head + rows + "</table>" +
+        "</div>";
+    var submitButton = "<input type='button' class='btn' value='Submit' onclick='onSubmitClick();' />"
 
     $("#tablesId").empty();
+    $("#tablesId").append(note);
     $("#tablesId").append(table);
     $("#tablesId").append(submitButton);
 }

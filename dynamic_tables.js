@@ -4,14 +4,17 @@ function generateTable() {
     console.log("Input values : "+ isNaN(contributors))
     if(isNaN(contributors) || contributors > 20 || contributors < 2){
         console.log("Log : Invalid values entered ")
+        $("#noteId").empty();
         $("#tablesId").empty();
         alert("Invalid value entered, \n" +
             "Contributors must be greater than 2 and less than 20 \n" +
             "Merchants must be greater than 1 and less than 20.")
+
         return 0
     }
     if(isNaN(merchants) || merchants > 20 || merchants < 1){
         console.log("Log : Invalid values entered ")
+        $("#noteId").empty();
         $("#tablesId").empty();
         alert("Invalid value entered, \n" +
             "Contributors must be greater than 2 and less than 20 \n" +
@@ -46,7 +49,7 @@ function generateTable() {
         "</ul>\n"
     var table = "<div class='table-responsive'><table class='table table-hover' border='1px' id='transactionDataTable'>" + head + rows + "</table>" +
         "</div>";
-    var submitButton = "<input type='button' class='btn' value='Submit' onclick='onSubmitClick();' />"
+    var submitButton = "<input type='button' class='btn btn-info btn-lg' data-toggle='modal' data-target='#myModal' value='Submit' onclick='onSubmitClick();' />"
 
     $("#tablesId").empty();
     $("#noteId").empty();
@@ -105,7 +108,36 @@ function onSubmitClick() {
 
 //let a = zipPaymentAndNames(['a', 'b', 'c'], ['12', '14', '33','12'])
 //differentiateCreditorAndDebtor(a, 14)
-    let events = getDebtInformation(totalContributors, expense)
-    console.log(events)
-    alert(events)
+    var events = getDebtInformation(totalContributors, expense)
+    console.log("Output " +events)
+    var modal = "<div id='myModal' class='modal fade' role='dialog'>\n" +
+        "    <div class='modal-dialog'>\n" +
+        "\n" +
+        "        <!-- Modal content-->\n" +
+        "        <div class='modal-content'>\n" +
+        "            <div class='modal-header'>\n" +
+        "                <button type='button' class='close' data-dismiss='modal'>&times;</button>\n" +
+        "                <h4 class='modal-title'>Result</h4>\n" +
+        "            </div>\n" +
+        "            <div class='modal-body'>\n" +
+        "                <p>"+events+"</p>\n" +
+        "            </div>\n" +
+        "            <div class='modal-footer'>\n" +
+        "                <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>\n" +
+        "            </div>\n" +
+        "        </div>\n" +
+        "    </div>\n" +
+        "</div>";
+    $("#tablesId").append(modal)
+
+    //alert(events)
+}
+
+function iterateEvents(events){
+    let itrEvents = ""
+    for(let i in events){
+        console.log(i)
+    }
+    print(itrEvents)
+    return itrEvents
 }

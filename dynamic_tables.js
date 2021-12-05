@@ -36,20 +36,21 @@ function generateTable() {
         data = "";
 
     }
-    var note = "<div class='container' >\n" +
-        "<ul style='list-style-type:none;'>\n" +
-        "    <li>Update merchants names from table</li>\n" +
-        "    <li>Update contributors names from table</li>\n" +
-        "    <li>Add values accordingly</li>\n" +
-        "    <li>Click on submit button</li>\n" +
-        "</ul>\n" +
-        "</div>"
+
+    var note = "<ul style='list-style-type:None;'>\n" +
+        "    <li>     <b>How to use</b>  </li>\n" +
+        "    <li>Edit merchants names from table column</li>\n" +
+        "    <li>Edit contributors names from table rows</li>\n" +
+        "    <li>Add each spending on tables accordingly</li>\n" +
+        "    <li>Click on submit button to get results</li>\n" +
+        "</ul>\n"
     var table = "<div class='table-responsive'><table class='table table-hover' border='1px' id='transactionDataTable'>" + head + rows + "</table>" +
         "</div>";
     var submitButton = "<input type='button' class='btn' value='Submit' onclick='onSubmitClick();' />"
 
     $("#tablesId").empty();
-    $("#tablesId").append(note);
+    $("#noteId").empty();
+    $("#noteId").append(note);
     $("#tablesId").append(table);
     $("#tablesId").append(submitButton);
 }

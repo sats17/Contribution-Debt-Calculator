@@ -19,20 +19,32 @@
 
 <body>
 <div class="container">
-<div class="container">
-    <h1 >Contribution Debt Calculator</h1>
-    <p>We are here to resolve your debt calculation</p>
+    <div class="container">
+        <h1 >Contribution Debt Calculator</h1>
+        <p>We are here to resolve your debt calculation</p>
+    </div>
+
+    <div style='float: right;' className="panel panel-default">
+        <div className="panel-footer" id="noteId"></div>
+    </div>
+
+    <div class="col-lg-4 col-lg-offset-4" >
+        <input type="number" min="2" max="20" maxlength = "2" id="contributors" class="form-control" placeholder="Enter total number of contributors" required autofocus/><br>
+        <input type="number" min="1" max="20" maxlength = "2" id="merchants" class="form-control" placeholder= "Enter total number of merchants"/><br>
+        <input type="button" class="btn btn-lg btn-primary btn-block" value="Click Me to generate fields to put data " onclick="generateTable();"/>
+    </div>
 </div>
 
-<div class="col-lg-4 col-lg-offset-4" >
-    <input type="number" min="2" max="20" maxlength = "2" id="contributors" class="form-control" placeholder="Enter total number of contributors" required autofocus/><br>
-    <input type="number" min="1" max="20" maxlength = "2" id="merchants" class="form-control" placeholder= "Enter total number of merchants"/><br>
-    <input type="button" class="btn btn-lg btn-primary btn-block" value="Click Me to generate fields to put data " onclick="generateTable();"/>
-</div>
-</div>
-
+<br>
 
 <div id="tablesId"></div>
+<br>
+<div class="panel panel-default">
+    <div class="panel-footer"><b>Note: We do not store any personal data, this pure client side calculator.</b>
+    <br>
+        <a href="https://www.github.com/sats17/Contribution-Debt-Calculator">Source Code</a>
+    </div>
+</div>
 
 
 </body>

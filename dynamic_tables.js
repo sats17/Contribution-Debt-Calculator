@@ -4,14 +4,17 @@ function generateTable() {
     console.log("Input values : "+ isNaN(contributors))
     if(isNaN(contributors) || contributors > 20 || contributors < 2){
         console.log("Log : Invalid values entered ")
+        $("#noteId").empty();
         $("#tablesId").empty();
         alert("Invalid value entered, \n" +
             "Contributors must be greater than 2 and less than 20 \n" +
             "Merchants must be greater than 1 and less than 20.")
+
         return 0
     }
     if(isNaN(merchants) || merchants > 20 || merchants < 1){
         console.log("Log : Invalid values entered ")
+        $("#noteId").empty();
         $("#tablesId").empty();
         alert("Invalid value entered, \n" +
             "Contributors must be greater than 2 and less than 20 \n" +
@@ -36,20 +39,21 @@ function generateTable() {
         data = "";
 
     }
-    var note = "<div class='container' >\n" +
-        "<ul style='list-style-type:none;'>\n" +
-        "    <li>Update merchants names from table</li>\n" +
-        "    <li>Update contributors names from table</li>\n" +
-        "    <li>Add values accordingly</li>\n" +
-        "    <li>Click on submit button</li>\n" +
-        "</ul>\n" +
-        "</div>"
+
+    var note = "<ul style='list-style-type:None;'>\n" +
+        "    <li>     <b>How to use</b>  </li>\n" +
+        "    <li>Edit merchants names from table column</li>\n" +
+        "    <li>Edit contributors names from table rows</li>\n" +
+        "    <li>Add each spending on tables accordingly</li>\n" +
+        "    <li>Click on submit button to get results</li>\n" +
+        "</ul>\n"
     var table = "<div class='table-responsive'><table class='table table-hover' border='1px' id='transactionDataTable'>" + head + rows + "</table>" +
         "</div>";
-    var submitButton = "<input type='button' class='btn' value='Submit' onclick='onSubmitClick();' />"
+    var submitButton = "<input type='button' class='btn btn-info btn-lg' data-toggle='modal' data-target='#myModal' value='Submit' onclick='onSubmitClick();' />"
 
     $("#tablesId").empty();
-    $("#tablesId").append(note);
+    $("#noteId").empty();
+    $("#noteId").append(note);
     $("#tablesId").append(table);
     $("#tablesId").append(submitButton);
 }
@@ -104,7 +108,36 @@ function onSubmitClick() {
 
 //let a = zipPaymentAndNames(['a', 'b', 'c'], ['12', '14', '33','12'])
 //differentiateCreditorAndDebtor(a, 14)
-    let events = getDebtInformation(totalContributors, expense)
-    console.log(events)
-    alert(events)
+    var events = getDebtInformation(totalContributors, expense)
+    console.log("Output " +events)
+    var modal = "<div id='myModal' class='modal fade' role='dialog'>\n" +
+        "    <div class='modal-dialog'>\n" +
+        "\n" +
+        "        <!-- Modal content-->\n" +
+        "        <div class='modal-content'>\n" +
+        "            <div class='modal-header'>\n" +
+        "                <button type='button' class='close' data-dismiss='modal'>&times;</button>\n" +
+        "                <h4 class='modal-title'>Result</h4>\n" +
+        "            </div>\n" +
+        "            <div class='modal-body'>\n" +
+        "                <p>"+events+"</p>\n" +
+        "            </div>\n" +
+        "            <div class='modal-footer'>\n" +
+        "                <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>\n" +
+        "            </div>\n" +
+        "        </div>\n" +
+        "    </div>\n" +
+        "</div>";
+    $("#tablesId").append(modal)
+
+    //alert(events)
+}
+
+function iterateEvents(events){
+    let itrEvents = ""
+    for(let i in events){
+        console.log(i)
+    }
+    print(itrEvents)
+    return itrEvents
 }

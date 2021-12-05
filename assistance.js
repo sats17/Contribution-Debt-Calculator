@@ -21,7 +21,8 @@ function getDebtInformation(totalMembers, expense){
     console.log("Zipped payment data with member names "+JSON.stringify(zippedPaymentData))
     var differentiatedResponse = differentiateCreditorAndDebtor(zippedPaymentData, expectedContributionBillFromEachMember)
     console.log("Differentiated creditor and debtor response "+ JSON.stringify(differentiatedResponse))
-    events = generateResolvedContributionEvents(differentiatedResponse)
+    var events = generateResolvedContributionEvents(differentiatedResponse)
+    console.log(events)
     return events
 }
 

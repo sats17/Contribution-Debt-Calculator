@@ -1,52 +1,156 @@
 <!DOCTYPE html>
-
 <html>
 
 <head>
     <title>Contribution Debt Calculator</title>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="canonical" href="https://getbootstrap.com/docs/3.4/examples/signin/">
-    <script src='assistance.js' type='text/javascript'></script>
-    <script src='dynamic_tables.js' type='text/javascript'></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="assistance.js"></script>
+    <script src="dynamic_tables.js"></script>
+
     <style>
-        h1 {text-align: center;}
-        p {text-align: center;}
-        div {text-align: center;}
+        body {
+            margin: 0;
+            font-family: system-ui, Arial, sans-serif;
+            background: #f6f7fb;
+            color: #222;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 28px;
+        }
+
+        p {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            max-width: 360px;
+            margin: 0 auto;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input[type="number"]:focus {
+            border-color: #4a90e2;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: #4a90e2;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #3b78c2;
+        }
+
+        #noteId {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            border: 1px solid #eee;
+            padding: 8px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        th {
+            background: #fafafa;
+            font-weight: 600;
+        }
+
+        td[contenteditable="true"], th[contenteditable="true"] {
+            background: #fffef6;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+
+        .footer a {
+            color: #4a90e2;
+            text-decoration: none;
+        }
     </style>
 </head>
 
 <body>
-<div class="container" id="result"></div>
+
 <div class="container">
-    <div class="container">
-        <h1 >Contribution Debt Calculator</h1>
-        <p>We are here to resolve your debt calculation</p>
+
+    <h1>Contribution Debt Calculator</h1>
+    <p>Simple way to split shared expenses</p>
+
+    <div class="card">
+        <div class="input-grid">
+            <input type="number" id="contributors" min="2" max="20"
+                   placeholder="Number of contributors">
+
+            <input type="number" id="merchants" min="1" max="20"
+                   placeholder="Number of merchants">
+
+            <button onclick="generateTable()">Generate Table</button>
+        </div>
+
+        <div id="noteId"></div>
     </div>
 
-    <div style='float: right;' className="panel panel-default">
-        <div className="panel-footer" id="noteId"></div>
+    <div id="tablesId"></div>
+
+    <div class="footer">
+        <p>
+            We do not store any data. Fully client-side calculator. <br>
+            <a href="https://www.github.com/sats17/Contribution-Debt-Calculator">Source Code</a>
+        </p>
     </div>
 
-    <div class="col-lg-4 col-lg-offset-4" >
-        <input type="number" min="2" max="20" maxlength = "2" id="contributors" class="form-control" placeholder="Enter total number of contributors" required autofocus/><br>
-        <input type="number" min="1" max="20" maxlength = "2" id="merchants" class="form-control" placeholder= "Enter total number of merchants"/><br>
-        <input type="button" class="btn btn-lg btn-primary btn-block" value="Click Me to generate fields to put data " onclick="generateTable();"/>
-    </div>
-</div>
-<!-- Modal -->
-
-
-<br>
-
-<div id="tablesId"></div>
-<br>
-<div class="panel panel-default">
-    <div class="panel-footer"><b>Note: We do not store any personal data, this pure client side calculator.</b>
-    <br>
-        <a href="https://www.github.com/sats17/Contribution-Debt-Calculator">Source Code</a>
-    </div>
 </div>
 
 </body>
